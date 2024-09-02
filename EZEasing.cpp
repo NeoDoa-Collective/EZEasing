@@ -159,11 +159,14 @@ namespace eze {
             : (pow(2.0f, -20.0f * ratio + 10.0f) * sin((20.0f * ratio - 11.125f) * c5)) / 2.0f + 1.0f;
     }
 
-
     float easeInBounce(float ratio) {
         return 1.0f - easeOutBounce(1.0f - ratio);
     }
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunsequenced" // Disable -Wunsequenced, https://easings.net/#easeOutBounce
+#endif
     float easeOutBounce(float ratio) {
         static constexpr float n1 = 7.5625f;
         static constexpr float d1 = 2.75f;
@@ -178,6 +181,9 @@ namespace eze {
             return n1 * (ratio -= 2.625f / d1) * ratio + 0.984375f;
         }
     }
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 
     float easeInOutBounce(float ratio) {
         return ratio < 0.5f
